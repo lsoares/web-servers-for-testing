@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "testingwebserver"
+version = "0.1.0"
+description = ""
+authors = ["Luís Soares <lsoares@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pytest = "^7.4.3"
+pytest-httpserver = "^1.0.8"
+fastapi = "^0.108.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
