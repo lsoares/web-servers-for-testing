@@ -1,4 +1,4 @@
-package testingWebServerGo
+package testingWebServer
 
 import (
 	"bytes"
