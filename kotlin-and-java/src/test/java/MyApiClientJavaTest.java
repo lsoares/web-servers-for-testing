@@ -1,7 +1,10 @@
 import io.javalin.Javalin;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // run tests with ./gradlew test
 public class MyApiClientJavaTest {
@@ -14,26 +17,27 @@ public class MyApiClientJavaTest {
 
             var apiClient = new MyApiClient("http://localhost:" + testServer.port());
 
-            var response = apiClient.getSomething("id123");
+            var something = apiClient.getSomething("id123");
 
-            assertEquals(200, response.statusCode());
-            assertEquals("Hello, mock server!", response.body());
+            assertEquals("Hello, mock server!", something);
         }
     }
 
     @Test
     public void testCommand() {
+        var requestMade = new AtomicBoolean(false);
         try (var testServer = Javalin.create()
                 .post("someResource", ctx -> {
                     assertEquals("some data", ctx.body());
                     ctx.status(201);
+                    requestMade.set(true);
                 })
                 .start()) {
             var apiClient = new MyApiClient("http://localhost:" + testServer.port());
 
-            var response = apiClient.postSomething("some data");
+            apiClient.postSomething("some data");
 
-            assertEquals(201, response.statusCode());
+            assertTrue(requestMade.get());
         }
     }
 }
