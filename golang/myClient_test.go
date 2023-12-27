@@ -13,32 +13,35 @@ import (
 
 // run tests with: `go test`
 func TestQuery(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "/someResource/id123", r.URL.Path)
 		w.Write([]byte("Hello, mock server!"))
 	}))
-	defer server.Close()
-	myClient := NewMyApiClient(server.URL)
+	defer testServer.Close()
+	apiClient := NewMyApiClient(testServer.URL)
 
-	response, err := myClient.GetSomething("id123")
+	response, err := apiClient.GetSomething("id123")
 
 	assert.Nil(t, err)
 	body, _ := io.ReadAll(response.Body)
+	assert.Equal(t, 200, response.StatusCode)
 	assert.Equal(t, "Hello, mock server!", string(body))
 }
 
 func TestCommand(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "/someResource", r.URL.Path)
 		assert.Equal(t, "POST", r.Method)
 		body, _ := io.ReadAll(r.Body)
 		assert.Equal(t, "some data", string(body))
+		w.WriteHeader(201)
 	}))
-	defer server.Close()
-	myClient := NewMyApiClient(server.URL)
+	defer testServer.Close()
+	apiClient := NewMyApiClient(testServer.URL)
 
-	_, err := myClient.PostSomething("/command", "some data")
+	response, err := apiClient.PostSomething("some data")
 
+	assert.Equal(t, 201, response.StatusCode)
 	assert.Nil(t, err)
 }
 
@@ -52,7 +55,7 @@ func (c *MyApiClient) GetSomething(id string) (*http.Response, error) {
 	return c.client.Get(fmt.Sprintf("%s/someResource/%s", c.baseUrl, id))
 }
 
-func (c *MyApiClient) PostSomething(endpoint string, data string) (*http.Response, error) {
+func (c *MyApiClient) PostSomething(data string) (*http.Response, error) {
 	return c.client.Post(fmt.Sprintf("%s/someResource", c.baseUrl), "application/json", bytes.NewBufferString(data))
 }
 
