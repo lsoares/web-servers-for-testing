@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("io.javalin:javalin:5.6.3")
+    testImplementation("org.slf4j:slf4j-simple:2.0.7")
 }
 
 tasks.test {
@@ -20,5 +22,5 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "20"
+    kotlinOptions.jvmTarget = "17"
 }
