@@ -1,4 +1,5 @@
 import io.javalin.Javalin
+import org.junit.jupiter.api.Assertions.assertFalse
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -7,42 +8,37 @@ import java.net.http.HttpResponse.BodyHandlers.ofString
 import java.nio.charset.StandardCharsets.UTF_8
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 // run tests with ./gradlew test
 class MyApiClientTest {
 
     @Test
     fun `test a query`() {
-        val testServer = Javalin.create()
-            .get("someResource/id123") {
+        Javalin.create().use {
+            it.get("someResource/id123") {
                 it.result("Hello, mock server!")
             }.start()
-        val apiClient = MyApiClient("http://localhost:${testServer.port()}")
+            val apiClient = MyApiClient("http://localhost:${it.port()}")
 
-        val something = testServer.use {
-            apiClient.getSomething("id123")
+            val something = apiClient.getSomething("id123")
+
+            assertEquals("Hello, mock server!", something)
         }
-
-        assertEquals("Hello, mock server!", something)
     }
 
     @Test
     fun `test a command`() {
-        var requestMade = false
-        val testServer = Javalin.create()
-            .post("someResource") {
-                assertEquals("some data", it.body())
-                it.status(201)
-                requestMade = true
+        Javalin.create().use {
+            var postedData = ""
+            it.post("someResource") {
+                postedData = it.body()
             }.start()
-        val apiClient = MyApiClient("http://localhost:${testServer.port()}")
+            val apiClient = MyApiClient("http://localhost:${it.port()}")
 
-        testServer.use {
             apiClient.postSomething("some data")
-        }
 
-        assertTrue(requestMade)
+            assertEquals("some data", postedData)
+        }
     }
 }
 
