@@ -1,0 +1,15 @@
+{
+  "name": "testingwebserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "Luis Soares",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.10",
+    "vitest": "^1.1.0"
+  }
+}
