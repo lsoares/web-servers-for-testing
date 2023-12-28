@@ -15,8 +15,8 @@ async def test_query(httpserver: HTTPServer):
 
     something = await api_client.get_something("id123")
 
-    assert len(httpserver.log) == 1
     assert something == "Hello, mock server!"
+    assert len(httpserver.log) == 1
 
 
 @pytest.mark.asyncio
