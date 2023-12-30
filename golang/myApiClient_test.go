@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// run tests with: go test`
+// run tests with: go test
 func TestQuery(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "/someResource/id123", r.URL.Path)
@@ -26,13 +26,12 @@ func TestQuery(t *testing.T) {
 }
 
 func TestCommand(t *testing.T) {
-	posted := false
+	postedBody := ""
 	testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "/someResource", r.URL.Path)
 		assert.Equal(t, "POST", r.Method)
 		body, _ := io.ReadAll(r.Body)
-		posted = true
-		assert.Equal(t, "some data", string(body))
+		postedBody = string(body)
 		w.WriteHeader(201)
 	}))
 	defer testServer.Close()
@@ -40,7 +39,7 @@ func TestCommand(t *testing.T) {
 
 	apiClient.PostSomething("some data")
 
-	assert.True(t, posted)
+	assert.Equal(t, "some data", postedBody)
 }
 
 // implementation:
