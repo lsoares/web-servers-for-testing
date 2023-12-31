@@ -1,12 +1,12 @@
 import express from "express";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, expect, test } from "vitest";
 import bodyParser from "body-parser";
 
 // run tests with: npm t
 let testServer;
 afterEach(() => testServer.close());
 
-it("executes query", async () => {
+test("query", async () => {
   testServer = express()
     .get("/someResource/id123", (_, res) => {
       res.send("Hello, mock server!");
@@ -19,7 +19,7 @@ it("executes query", async () => {
   expect(something).toBe("Hello, mock server!");
 });
 
-it("executes command", () =>
+test("command", () =>
   new Promise(async (done) => {
     testServer = express()
       .use(bodyParser.text())
