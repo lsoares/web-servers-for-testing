@@ -3,7 +3,7 @@ defmodule MyApiClientTest do
   use ExUnit.Case
 
   test "a query" do
-    defmodule MockServer do
+    defmodule TestServer do
       use Francis
 
       get("someResource/:id", fn
@@ -11,8 +11,9 @@ defmodule MyApiClientTest do
       end)
     end
 
-    start_supervised!({Bandit, plug: MockServer, port: 8080})
+    start_supervised!({Bandit, plug: TestServer, port: 8080})
     apiClient = MyApiClient.build("http://localhost:8080")
+
 
     something = MyApiClient.get_something(apiClient, "id123")
 
