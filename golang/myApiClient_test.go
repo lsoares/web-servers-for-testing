@@ -32,7 +32,6 @@ func TestCommand(t *testing.T) {
 		assert.Equal(t, "POST", r.Method)
 		body, _ := io.ReadAll(r.Body)
 		postedBody = string(body)
-		w.WriteHeader(201)
 	}))
 	defer testServer.Close()
 	apiClient := NewMyApiClient(testServer.URL)
