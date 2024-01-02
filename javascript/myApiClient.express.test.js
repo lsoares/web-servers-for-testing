@@ -1,6 +1,7 @@
 import express from "express";
 import { afterEach, expect, test } from "vitest";
 import bodyParser from "body-parser";
+import { MyApiClient } from "myApiClient";
 
 // run tests with: npm t
 let testServer;
@@ -32,22 +33,3 @@ test("command", () =>
 
     await apiClient.postSomething("some data");
   }));
-
-// implementation:
-class MyApiClient {
-  constructor(baseUrl) {
-    this.baseUrl = baseUrl;
-  }
-
-  async getSomething(id) {
-    const response = await fetch(`${this.baseUrl}/someResource/${id}`);
-    return await response.text();
-  }
-
-  async postSomething(data) {
-    await fetch(`${this.baseUrl}/someResource`, {
-      method: "POST",
-      body: data,
-    });
-  }
-}
