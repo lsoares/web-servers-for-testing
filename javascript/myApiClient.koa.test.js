@@ -1,6 +1,6 @@
 import Koa from "koa";
 import koaBody from "koa-body";
-import { expect, test, afterEach, assert } from "vitest";
+import { expect, test, afterEach, assert, beforeAll } from "vitest";
 import { MyApiClient } from "myApiClient";
 
 // run tests with: npm t
@@ -14,8 +14,11 @@ test("query", async () => {
       expect(ctx.path).toBe("/someResource/id123");
       ctx.body = "Hello, mock server!";
     })
-    .listen(3000);
-  const apiClient = new MyApiClient("http://localhost:3000");
+    .listen();
+  const apiClient = new MyApiClient(
+    `http://localhost:${testServer.address().port}`
+  );
+  console.log(testServer.address());
 
   const something = await apiClient.getSomething("id123");
 
@@ -31,8 +34,10 @@ test("command", async () => {
       expect(ctx.path).toBe("/someResource");
       postedBody = ctx.request.body;
     })
-    .listen(3000);
-  const apiClient = new MyApiClient("http://localhost:3000");
+    .listen();
+  const apiClient = new MyApiClient(
+    `http://localhost:${testServer.address().port}`
+  );
 
   await apiClient.postSomething("some data");
 
