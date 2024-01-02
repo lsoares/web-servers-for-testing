@@ -18,7 +18,6 @@ test("query", async () => {
   const apiClient = new MyApiClient(
     `http://localhost:${testServer.address().port}`
   );
-  console.log(testServer.address());
 
   const something = await apiClient.getSomething("id123");
 
