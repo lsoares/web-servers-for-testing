@@ -12,24 +12,30 @@ test("query", async () => {
     .get("/someResource/id123", (_, res) => {
       res.send("Hello, mock server!");
     })
-    .listen(3000);
-  const apiClient = new MyApiClient("http://localhost:3000");
-
+    .listen();
+  const apiClient = new MyApiClient(
+    `http://localhost:${testServer.address().port}`
+  );
   const something = await apiClient.getSomething("id123");
 
   expect(something).toBe("Hello, mock server!");
 });
 
-test("command", () =>
-  new Promise(async (done) => {
-    testServer = express()
-      .use(bodyParser.text())
-      .post("/someResource", async (req, _) => {
-        expect(req.body).toBe("some data");
-        done();
-      })
-      .listen(3000);
-    const apiClient = new MyApiClient("http://localhost:3000");
+test("command", async (done) => {
+  let postedData = "";
+  testServer = express()
+    .use(bodyParser.text())
+    .post("/someResource", (req, _) => {
+      expect(req.body).toBe("some data");
+      postedData = req.body;
+      done();
+    })
+    .listen();
+  const apiClient = new MyApiClient(
+    `http://localhost:${testServer.address().port}`
+  );
 
-    await apiClient.postSomething("some data");
-  }));
+  await apiClient.postSomething("some data");
+
+  expect(postedData).toBe("some data");
+});
