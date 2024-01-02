@@ -16,6 +16,7 @@ test("query", async () => {
   const apiClient = new MyApiClient(
     `http://localhost:${testServer.address().port}`
   );
+
   const something = await apiClient.getSomething("id123");
 
   expect(something).toBe("Hello, mock server!");
@@ -26,7 +27,6 @@ test("command", async (done) => {
   testServer = express()
     .use(bodyParser.text())
     .post("/someResource", (req, _) => {
-      expect(req.body).toBe("some data");
       postedData = req.body;
       done();
     })
