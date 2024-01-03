@@ -35,10 +35,8 @@ describe 'my api client tests' do
 end
 
 class MyApiClient
-  attr_reader :base_url
 
   def initialize(base_url)
-    @base_url = base_url
     @client = Net::HTTP.new(URI.parse(base_url).host, URI.parse(base_url).port)
   end
 
