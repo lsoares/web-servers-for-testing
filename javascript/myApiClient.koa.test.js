@@ -1,7 +1,7 @@
 import Koa from "koa";
 import koaBody from "koa-body";
-import { expect, test, afterEach, assert, beforeAll } from "vitest";
 import { MyApiClient } from "myApiClient";
+import { afterEach, expect, test } from "vitest";
 
 // run tests with: npm t
 let testServer;

@@ -1,7 +1,7 @@
-import express from "express";
-import { afterEach, expect, test } from "vitest";
 import bodyParser from "body-parser";
+import express from "express";
 import { MyApiClient } from "myApiClient";
+import { afterEach, expect, test } from "vitest";
 
 // run tests with: npm t
 let testServer;
