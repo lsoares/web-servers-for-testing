@@ -9,8 +9,7 @@ readme = "README.md"
 python = "^3.9"
 pytest = "^7.4.3"
 pytest-httpserver = "^1.0.8"
-aiohttp = "^3.9.1"
-pytest-asyncio = "^0.23.2"
+requests = "^2.31.0"
 
 
 [build-system]
