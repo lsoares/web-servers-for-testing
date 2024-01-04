@@ -22,13 +22,13 @@ test("query", async () => {
   expect(something).toBe("Hello, mock server!");
 });
 
-test("command", async (done) => {
+test("command", async () => {
   let postedData = "";
   testServer = express()
     .use(bodyParser.text())
-    .post("/someResource", (req, _) => {
+    .post("/someResource", (req, res) => {
       postedData = req.body;
-      done();
+      res.send();
     })
     .listen();
   const apiClient = new MyApiClient(
