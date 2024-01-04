@@ -1,6 +1,7 @@
 require 'net/http'
 require 'webrick'
 
+# run tests with: bundle exec rspec
 describe 'my api client tests' do
   let(:test_server) { WEBrick::HTTPServer.new(Port: 8000) }
   after(:each) do
@@ -34,15 +35,14 @@ describe 'my api client tests' do
   end
 end
 
+# implementation:
 class MyApiClient
-
   def initialize(base_url)
     @client = Net::HTTP.new(URI.parse(base_url).host, URI.parse(base_url).port)
   end
 
   def get_something(id)
-    response = @client.get("/someResource/#{id}")
-    response.body
+    @client.get("/someResource/#{id}").body
   end
 
   def post_something(data)
