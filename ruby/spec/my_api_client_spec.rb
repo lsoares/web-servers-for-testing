@@ -11,6 +11,7 @@ describe 'my api client tests' do
 
   it 'performs a query' do
     test_server.mount_proc '/someResource' do |req, res|
+      expect(req.request_method).to eq('GET')
       res.body = 'Hello, mock server!'
     end
     @server_thread = Thread.new { test_server.start }
@@ -23,7 +24,8 @@ describe 'my api client tests' do
 
   it 'performs a command' do
     posted_data = ''
-    test_server.mount_proc '/someResource' do |req, res|
+    test_server.mount_proc '/someResource' do |req, _|
+      expect(req.request_method).to eq('POST')
       posted_data = req.body
     end
     @server_thread = Thread.new { test_server.start }
