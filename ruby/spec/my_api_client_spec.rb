@@ -3,7 +3,7 @@ require 'webrick'
 
 # run tests with: bundle exec rspec
 describe 'my api client tests' do
-  let(:test_server) { WEBrick::HTTPServer.new(Port: 8000) }
+  let(:test_server) { WEBrick::HTTPServer.new }
   after(:each) do
     test_server.shutdown
     @server_thread.join if @server_thread
