@@ -1,6 +1,6 @@
 interface ProfileApiClient {
     fun saveProfile(profile: Profile)
-    fun getProfile(): Profile
+    fun getProfile(): Profile?
 }
 
 data class Profile(val name: String)
