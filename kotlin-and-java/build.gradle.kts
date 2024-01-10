@@ -15,6 +15,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("io.javalin:javalin:5.6.3")
     testImplementation("org.slf4j:slf4j-simple:2.0.7")
+    testImplementation("io.mockk:mockk:1.13.9")
 }
 
 tasks.test {
