@@ -16,6 +16,16 @@ class StubMockSpyWithLibraryTest {
     }
 
     @Test
+    fun `spy using a library`() {
+        val profileApiClient = spyk<ProfileApiClient>()
+        val game = Game(profileApiClient)
+
+        game.saveProfile(Profile("john doe"))
+
+        verify(exactly = 1) { profileApiClient.saveProfile(Profile("john doe")) }
+    }
+
+    @Test
     fun `mock using a library`() {
         val profileApiClient = mockk<ProfileApiClient> {
             every { saveProfile(Profile("john doe")) } just runs
@@ -25,15 +35,5 @@ class StubMockSpyWithLibraryTest {
         game.saveProfile(Profile("john doe"))
 
         verify(exactly = 1) { profileApiClient.saveProfile(any()) }
-    }
-
-    @Test
-    fun `spy using a library`() {
-        val profileApiClient = spyk<ProfileApiClient>()
-        val game = Game(profileApiClient)
-
-        game.saveProfile(Profile("john doe"))
-
-        verify(exactly = 1) { profileApiClient.saveProfile(Profile("john doe")) }
     }
 }
