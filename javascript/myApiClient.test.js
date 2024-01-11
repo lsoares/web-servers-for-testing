@@ -1,4 +1,3 @@
-import concat from "concat-stream";
 import http from "http";
 import { MyApiClient } from "myApiClient";
 import url from "url";
@@ -29,12 +28,12 @@ test("command", async () => {
   testServer = http.createServer((req, res) => {
     expect(req.method).toBe("POST");
     expect(req.url).toBe("/someResource");
-    req.pipe(
-      concat((data) => {
-        postedBody = data.toString();
-        res.end("");
-      })
-    );
+    let body = "";
+    req.on("data", (chunk) => (body += chunk));
+    req.on("end", () => {
+      postedBody = body;
+      res.end("");
+    });
   });
   await new Promise((resolve) => testServer.listen(0, "localhost", resolve));
   const apiClient = new MyApiClient(
