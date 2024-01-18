@@ -16,4 +16,4 @@ class MyApiClient {
   }
 }
 
-export { MyApiClient };
+module.exports = { MyApiClient };

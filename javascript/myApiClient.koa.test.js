@@ -1,7 +1,8 @@
-import Koa from "koa";
-import koaBody from "koa-body";
-import { MyApiClient } from "myApiClient";
-import { afterEach, expect, test } from "vitest";
+const Koa = require("koa");
+const { koaBody } = require("koa-body");
+const { MyApiClient } = require("./myApiClient");
+const { afterEach, test } = require("node:test");
+const assert = require("node:assert");
 
 // run tests with: npm t
 let testServer;
@@ -10,8 +11,8 @@ afterEach(() => testServer.close());
 test("query", async () => {
   testServer = new Koa()
     .use((ctx) => {
-      expect(ctx.method).toBe("GET");
-      expect(ctx.path).toBe("/someResource/id123");
+      assert.equal(ctx.method, "GET");
+      assert.equal(ctx.path, "/someResource/id123");
       ctx.body = "Hello, mock server!";
     })
     .listen();
@@ -21,7 +22,7 @@ test("query", async () => {
 
   const something = await apiClient.getSomething("id123");
 
-  expect(something).toBe("Hello, mock server!");
+  assert.equal(something, "Hello, mock server!");
 });
 
 test("command", async () => {
@@ -29,8 +30,8 @@ test("command", async () => {
   testServer = new Koa()
     .use(koaBody())
     .use((ctx) => {
-      expect(ctx.method).toBe("POST");
-      expect(ctx.path).toBe("/someResource");
+      assert.equal(ctx.method, "POST");
+      assert.equal(ctx.path, "/someResource");
       postedBody = ctx.request.body;
     })
     .listen();
@@ -40,5 +41,5 @@ test("command", async () => {
 
   await apiClient.postSomething("some data");
 
-  expect(postedBody).toBe("some data");
+  assert.equal(postedBody, "some data");
 });

@@ -1,7 +1,8 @@
-import bodyParser from "body-parser";
-import express from "express";
-import { MyApiClient } from "myApiClient";
-import { afterEach, expect, test } from "vitest";
+const bodyParser = require("body-parser");
+const express = require("express");
+const { MyApiClient } = require("./myApiClient");
+const { afterEach, test } = require("node:test");
+const assert = require("node:assert");
 
 // run tests with: npm t
 let testServer;
@@ -19,7 +20,7 @@ test("query", async () => {
 
   const something = await apiClient.getSomething("id123");
 
-  expect(something).toBe("Hello, mock server!");
+  assert.equal(something, "Hello, mock server!");
 });
 
 test("command", async () => {
@@ -37,5 +38,5 @@ test("command", async () => {
 
   await apiClient.postSomething("some data");
 
-  expect(postedData).toBe("some data");
+  assert.equal(postedData, "some data");
 });

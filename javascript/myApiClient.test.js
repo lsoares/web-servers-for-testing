@@ -1,7 +1,8 @@
-import http from "http";
-import { MyApiClient } from "myApiClient";
-import url from "url";
-import { afterEach, expect, test } from "vitest";
+const http = require("http");
+const { MyApiClient } = require("./myApiClient");
+const url = require("url");
+const { afterEach, test } = require("node:test");
+const assert = require("node:assert");
 
 let testServer;
 afterEach(async () => await testServer.close());
@@ -9,8 +10,8 @@ afterEach(async () => await testServer.close());
 test("query", async () => {
   testServer = http.createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true);
-    expect(req.method).toBe("GET");
-    expect(req.url).toBe("/someResource/id123");
+    assert.equal(req.method, "GET");
+    assert.equal(req.url, "/someResource/id123");
     res.end("Hello, mock server!");
   });
   await new Promise((resolve) => testServer.listen(0, "localhost", resolve));
@@ -20,14 +21,14 @@ test("query", async () => {
 
   const something = await apiClient.getSomething("id123");
 
-  expect(something).toBe("Hello, mock server!");
+  assert.equal(something, "Hello, mock server!");
 });
 
 test("command", async () => {
   let postedBody = "";
   testServer = http.createServer((req, res) => {
-    expect(req.method).toBe("POST");
-    expect(req.url).toBe("/someResource");
+    assert.equal(req.method, "POST");
+    assert.equal(req.url, "/someResource");
     let body = "";
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
@@ -42,5 +43,5 @@ test("command", async () => {
 
   await apiClient.postSomething("some data");
 
-  expect(postedBody).toBe("some data");
+  assert.equal(postedBody, "some data");
 });
